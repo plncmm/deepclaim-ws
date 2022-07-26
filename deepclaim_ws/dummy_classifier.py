@@ -16,6 +16,10 @@ class DummyTipoEntidadClassifier(DummyClassifier):
     def __init__(self) -> str:
         self.classes = ["entidad_a", "entidad_b", "entidad_c"]
 
+class DummyNombreEntidadClassifier(DummyClassifier):
+    def __init__(self) -> str:
+        self.classes = ["entidad_A", "entidad_B", "entidad_C"]
+
 class DummyTipoProductoClassifier(DummyClassifier):
     def __init__(self) -> str:
         self.classes = ["producto_a", "producto_b", "producto_c"]
