@@ -1,9 +1,10 @@
 import fastapi
 import pydantic
 import datetime
+import typing
 
 class JsonReclamo(pydantic.BaseModel):
-    id_caso: int = fastapi.Query(default=None, description="ID único interno del ticket de atención")
+    Id_caso: int = fastapi.Query(default=None, description="ID único interno del ticket de atención")
     fecha_ingreso: datetime.date = fastapi.Query(default=None, description="Fecha ingreso")
     descripcion_problema: str = fastapi.Query(default=None, description="Descripción del problema ingresado por el ciudadano")
     peticion_solicitud: str = fastapi.Query(default=None, description="Petición del problema ingresado por el ciudadano")
@@ -27,3 +28,28 @@ class ReclamoOut(pydantic.BaseModel):
     TransactionID: int = fastapi.Query(default=None, description="Código Único de la transacción")
     Status: StatusClass
     Respuesta:  RespuestaClass
+
+class DocumentosClass(pydantic.BaseModel):
+    hash_archivo: str = fastapi.Query(default=None, description="Hash registrado por el archivo")
+    nombre_archivo: str = fastapi.Query(default=None, description="Nombre archivo con extensión")
+
+class DatosCasos(pydantic.BaseModel):
+    Id_caso: int = fastapi.Query(default=None, description="ID único interno del ticket de atención")
+    fecha_ingreso: datetime.date = fastapi.Query(default=None, description="Fecha ingreso")
+    descripcion_problema: str = fastapi.Query(default=None, description="Descripción del problema ingresado por el ciudadano")
+    peticion_solicitud: str = fastapi.Query(default=None, description="Petición del problema ingresado por el ciudadano")
+    clasificacion_ciudadano: str = fastapi.Query(default=None, description="Producto - clasificación inicial ingresada por el ciudadano")
+    entidad_ciudadano: str = fastapi.Query(default=None, description="Solo para los casos bancarios ingresan el banco contra el cual está reclamando")
+    clasificado: str = fastapi.Query(default=None, description="Señala si el reclamo ya fue clasificado por el algoritmo o no. (S/N)")
+    Documentos: DocumentosClass
+
+class DataReclamo(pydantic.BaseModel):
+    fecha_consulta: datetime.date = fastapi.Query(default=None, description="Fecha consulta")
+    Datos_casos: typing.List[DatosCasos] = fastapi.Query(default=None, description="Array que contiene la información para iniciar el ticket")
+    
+class JsonReclamos(pydantic.BaseModel):
+    Data: DataReclamo
+
+class ReclamoDiarioOut(pydantic.BaseModel):
+    TransactionID: int = fastapi.Query(default=None, description="Código Único de la transacción")
+    Status: StatusClass

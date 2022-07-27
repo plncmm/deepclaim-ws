@@ -41,3 +41,16 @@ async def classify_reclamo(
         )
     )
     return response
+
+@app.post("/reclamo_diario", response_model=deepclaim_ws.data.ReclamoDiarioOut, summary="Clasificar reclamos diarios.", description="Este servicio recibe los datos del reclamo ingresado por el ciudadano con los datos del día anterior con el fin de poder realizar cuadraturas al servicio.")
+async def classify_reclamo_diario(
+    datos_reclamo: deepclaim_ws.data.JsonReclamos
+    ):  
+    response = deepclaim_ws.data.ReclamoDiarioOut(
+        TransactionID=0,
+        Status = deepclaim_ws.data.StatusClass(
+            Code = 200,
+            Value = "OK"
+        )
+    )
+    return response
