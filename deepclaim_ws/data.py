@@ -62,3 +62,15 @@ class Json(pydantic.BaseModel):
     clasificacion_ciudadano: str = fastapi.Query(default=None, description="Producto - clasificación inicial ingresada por el ciudadano")
     entidad_ciudadano: str = fastapi.Query(default=None, description="Solo para los casos bancarios ingresan el banco contra el cual está reclamando")
     cantidad_documentos: int = fastapi.Query(default=None, description="Se indicará la cantidad de documentos que se enviaran como adjuntos")
+    
+class JsonClasificacion(pydantic.BaseModel):
+    Id_caso: int = fastapi.Query(default=None, description="ID único interno del ticket de atención(enviado en la consulta)")
+    Mercado: str = fastapi.Query(default=None, description="Tipo de mercado: Seguros-bancos-valores")
+    Tipo_entidad: str = fastapi.Query(default=None, description="Tipo de entidad identificada ( desde el listado de entidades de la CMF)")
+    Nombre_entidad: str = fastapi.Query(default=None, description="Nombre de entidad identificada ( desde el listado de entidades de la CMF)")
+    Tipo_producto: str = fastapi.Query(default=None, description="Tipo producto identificados ( desde listado de tipos productos de la CMF)")
+    Tipo_materia: str = fastapi.Query(default=None, description="Tipo materia identificados ( desde listado de tipos materia de la CMF)")
+    
+class ReclamoRetroOut(pydantic.BaseModel):
+    TransactionID: int = fastapi.Query(default=None, description="Código Único de la transacción")
+    Status: StatusClass

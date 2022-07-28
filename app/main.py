@@ -32,7 +32,7 @@ async def classify_reclamo(
             Value = "OK"
         ),
         Respuesta = deepclaim_ws.data.RespuestaClass(
-            Id_caso = datos_reclamo.id_caso,
+            Id_caso = datos_reclamo.Id_caso,
             Mercado = c_mercado.predict([datos_reclamo.descripcion_problema])[0],
             Tipo_entidad = c_tipo_entidad.predict([datos_reclamo.descripcion_problema])[0],
             Nombre_entidad = c_nombre_entidad.predict([datos_reclamo.descripcion_problema])[0],
@@ -79,6 +79,19 @@ async def classify_reclamo_sinRespuesta(
             Nombre_entidad = c_nombre_entidad.predict([datos_reclamo.descripcion_problema])[0],
             Tipo_producto = c_tipo_producto.predict([datos_reclamo.descripcion_problema])[0],
             Tipo_materia = c_tipo_materia.predict([datos_reclamo.descripcion_problema])[0]
+        )
+    )
+    return response
+
+@app.post("/reclamo_retro", response_model=deepclaim_ws.data.ReclamoRetroOut, summary="Clasificar reclamos diarios.", description="Este servicio recibe los datos del reclamo con la clasificación ingresada por los analistas de CMF, con el fin de que puedan realizar retroalimentación a la clasificación proporcionada por el algoritmo.")
+async def receive_reclamo_retro(
+    datos_clasificación: deepclaim_ws.data.JsonClasificacion
+    ):  
+    response = deepclaim_ws.data.ReclamoRetroOut(
+        TransactionID=0,
+        Status = deepclaim_ws.data.StatusClass(
+            Code = 200,
+            Value = "OK"
         )
     )
     return response
