@@ -54,3 +54,31 @@ async def classify_reclamo_diario(
         )
     )
     return response
+
+@app.post("/reclamo_sinRespuesta", response_model=deepclaim_ws.data.ReclamoOut, summary="Clasificar reclamo.", description="Este servicio recibe los datos del reclamo que no han tenido clasificación por su equipo, este cliente se activará 4 veces al día y enviará los datos del reclamocomo si se tratará del servicio Reclamo pero de manera diferida")
+async def classify_reclamo_sinRespuesta(
+    datos_reclamo: deepclaim_ws.data.Json = fastapi.Depends(checker), 
+    archivo_1: typing.Optional[fastapi.UploadFile] = fastapi.File(None), 
+    archivo_2: typing.Optional[fastapi.UploadFile] = fastapi.File(None)
+    ):  
+    c_mercado = deepclaim_ws.dummy_classifier.DummyMercadoClassifier()
+    c_tipo_entidad = deepclaim_ws.dummy_classifier.DummyTipoEntidadClassifier()
+    c_tipo_materia = deepclaim_ws.dummy_classifier.DummyTipoMateriaClassifier()
+    c_tipo_producto = deepclaim_ws.dummy_classifier.DummyTipoProductoClassifier()
+    c_nombre_entidad = deepclaim_ws.dummy_classifier.DummyNombreEntidadClassifier()
+    response = deepclaim_ws.data.ReclamoOut(
+        TransactionID=0,
+        Status = deepclaim_ws.data.StatusClass(
+            Code = 200,
+            Value = "OK"
+        ),
+        Respuesta = deepclaim_ws.data.RespuestaClass(
+            Id_caso = datos_reclamo.id_caso,
+            Mercado = c_mercado.predict([datos_reclamo.descripcion_problema])[0],
+            Tipo_entidad = c_tipo_entidad.predict([datos_reclamo.descripcion_problema])[0],
+            Nombre_entidad = c_nombre_entidad.predict([datos_reclamo.descripcion_problema])[0],
+            Tipo_producto = c_tipo_producto.predict([datos_reclamo.descripcion_problema])[0],
+            Tipo_materia = c_tipo_materia.predict([datos_reclamo.descripcion_problema])[0]
+        )
+    )
+    return response

@@ -41,7 +41,7 @@ class DatosCasos(pydantic.BaseModel):
     clasificacion_ciudadano: str = fastapi.Query(default=None, description="Producto - clasificación inicial ingresada por el ciudadano")
     entidad_ciudadano: str = fastapi.Query(default=None, description="Solo para los casos bancarios ingresan el banco contra el cual está reclamando")
     clasificado: str = fastapi.Query(default=None, description="Señala si el reclamo ya fue clasificado por el algoritmo o no. (S/N)")
-    Documentos: DocumentosClass
+    Documentos: typing.List[DocumentosClass]
 
 class DataReclamo(pydantic.BaseModel):
     fecha_consulta: datetime.date = fastapi.Query(default=None, description="Fecha consulta")
@@ -53,3 +53,12 @@ class JsonReclamos(pydantic.BaseModel):
 class ReclamoDiarioOut(pydantic.BaseModel):
     TransactionID: int = fastapi.Query(default=None, description="Código Único de la transacción")
     Status: StatusClass
+
+class Json(pydantic.BaseModel):
+    Id_caso: int = fastapi.Query(default=None, description="ID único interno del ticket de atención")
+    fecha_ingreso: datetime.date = fastapi.Query(default=None, description="Fecha ingreso")
+    descripcion_problema: str = fastapi.Query(default=None, description="Descripción del problema ingresado por el ciudadano")
+    peticion_solicitud: str = fastapi.Query(default=None, description="Petición del problema ingresado por el ciudadano")
+    clasificacion_ciudadano: str = fastapi.Query(default=None, description="Producto - clasificación inicial ingresada por el ciudadano")
+    entidad_ciudadano: str = fastapi.Query(default=None, description="Solo para los casos bancarios ingresan el banco contra el cual está reclamando")
+    cantidad_documentos: int = fastapi.Query(default=None, description="Se indicará la cantidad de documentos que se enviaran como adjuntos")
