@@ -108,7 +108,7 @@ async def get_current_active_client(current_client: Client = fastapi.Depends(get
         raise fastapi.HTTPException(status_code=400, detail="Inactive user")
     return current_client
 
-@app.post("/token2", response_model=Token)
+@app.post("/token2", response_model=Token, include_in_schema=False)
 async def login_for_access_token(form_data: fastapi.security.OAuth2PasswordRequestForm = fastapi.Depends()):
     user = authenticate_user(clients_db, form_data.username, form_data.password)
     if not user:
