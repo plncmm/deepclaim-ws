@@ -18,7 +18,7 @@ model = BertForSequenceClassification.from_pretrained(
                 output_hidden_states = False, 
         )    
 
-class Classifier:
+class ClaimClassifier:
     def __init__(self) -> str:
         
         self.tipo_mercado = load_model(model, tokenizer, 'models/mercado_ingreso_bancos_o_otros', 'cpu')
@@ -76,8 +76,7 @@ class Classifier:
         prediction_sampler = SequentialSampler(prediction_data)
         prediction_dataloader = DataLoader(prediction_data, sampler=prediction_sampler, batch_size=batch_size)
         
-        print('Predicting labels for {:,} test sentences...'.format(len(input_ids)))
-
+       
         predictions , true_labels = [], []
         table = []
 
@@ -88,8 +87,7 @@ class Classifier:
         for i, batch in enumerate(prediction_dataloader):
             sentence_data = []
             
-            if i%100==0:
-                print(f'Sentence number: {i+1}')
+           
             # Add batch to GPU
             batch = tuple(t.to(device) for t in batch)
             
@@ -223,7 +221,7 @@ class Classifier:
                 bancos_nombre_entidad_opciones = open('models/bancos_nombre_entidad_target_names.txt', 'r').read().splitlines()
                 bancos_nombre_entidad_opciones = {v: k for v, k in enumerate(bancos_nombre_entidad_opciones)}
                 sentence_data.append(bancos_nombre_entidad_opciones[int(pred_bancos_nombre_entidad)])
-                print('Nombre entidad')
+         
                 
                 labels['Nombre_Entidad'] = bancos_nombre_entidad_opciones[int(pred_bancos_nombre_entidad)]
 
@@ -282,9 +280,36 @@ class Classifier:
             table.append(sentence_data)
             
 
-    
         return predictions
+
+class DummyClassifier:
+    def __init__(self, classes: list) -> str:
+        classes = self.classes
+    def predict(self, x: list):
+        length = len(x)
+        predictions = [random.choice(self.classes) for _ in range(length)]
+        return predictions
+
+class DummyMercadoClassifier(DummyClassifier):
+    def __init__(self) -> str:
+        self.classes = ["seguros", "bancos", "valores"]
         
+class DummyTipoEntidadClassifier(DummyClassifier):
+    def __init__(self) -> str:
+        self.classes = ["entidad_a", "entidad_b", "entidad_c"]
+
+class DummyNombreEntidadClassifier(DummyClassifier):
+    def __init__(self) -> str:
+        self.classes = ["entidad_A", "entidad_B", "entidad_C"]
+
+class DummyTipoProductoClassifier(DummyClassifier):
+    def __init__(self) -> str:
+        self.classes = ["producto_a", "producto_b", "producto_c"]
+
+class DummyTipoMateriaClassifier(DummyClassifier):
+    def __init__(self) -> str:
+        self.classes = ["materia_a", "materia_b", "materia_c"]
+              
 if __name__=='__main__':
-    c = Classifier()
-    c.predict(['reclamo por seguro de vida', 'reclamo por inversión en la bolsa'])
+    c = ClaimClassifier()
+    c.predict(['reclamo por seguro de vida'])
