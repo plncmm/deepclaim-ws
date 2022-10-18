@@ -228,7 +228,7 @@ async def classify_reclamo_sinRespuesta(
 
 @app.post("/reclamo_retro", response_model=deepclaim_ws.data.ReclamoRetroOut, summary="Clasificar reclamos diarios.", description="Este servicio recibe los datos del reclamo con la clasificación ingresada por los analistas de CMF, con el fin de que puedan realizar retroalimentación a la clasificación proporcionada por el algoritmo.", dependencies=[fastapi.Depends(get_current_active_client)])
 async def receive_reclamo_retro(
-    datos_clasificación: deepclaim_ws.data.JsonClasificacion
+    datos_clasificacion: deepclaim_ws.data.JsonClasificacion
     ):  
     response = deepclaim_ws.data.ReclamoRetroOut(
         TransactionID=0,
