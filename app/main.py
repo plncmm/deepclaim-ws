@@ -213,7 +213,7 @@ async def classify_reclamo_sinRespuesta(
             Code = 200,
             Value = "OK"
         ),
-        Respuesta = deepclaim_ws.data.RespuestaClass(
+        Data = deepclaim_ws.data.RespuestaClass(
             id_caso = datos_reclamo.id_caso,
             mercado = deepclaim_ws.data.MercadoClass(
                 tipo_mercado = c_mercado.predict([datos_reclamo.descripcion_problema])[0],
