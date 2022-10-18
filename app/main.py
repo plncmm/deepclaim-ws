@@ -214,12 +214,14 @@ async def classify_reclamo_sinRespuesta(
             Value = "OK"
         ),
         Respuesta = deepclaim_ws.data.RespuestaClass(
-            Id_caso = datos_reclamo.id_caso,
-            Mercado = c_mercado.predict([datos_reclamo.descripcion_problema])[0],
-            Tipo_entidad = c_tipo_entidad.predict([datos_reclamo.descripcion_problema])[0],
-            Nombre_entidad = c_nombre_entidad.predict([datos_reclamo.descripcion_problema])[0],
-            Tipo_producto = c_tipo_producto.predict([datos_reclamo.descripcion_problema])[0],
-            Tipo_materia = c_tipo_materia.predict([datos_reclamo.descripcion_problema])[0]
+            id_caso = datos_reclamo.id_caso,
+            mercado = deepclaim_ws.data.MercadoClass(
+                tipo_mercado = c_mercado.predict([datos_reclamo.descripcion_problema])[0],
+                tipo_entidad = c_tipo_entidad.predict([datos_reclamo.descripcion_problema])[0],
+                nombre_entidad = c_nombre_entidad.predict([datos_reclamo.descripcion_problema])[0],
+                tipo_producto = c_tipo_producto.predict([datos_reclamo.descripcion_problema])[:2],
+                tipo_materia = c_tipo_materia.predict([datos_reclamo.descripcion_problema])[:2]
+            )
         )
     )
     return response
