@@ -69,7 +69,7 @@ class Json(pydantic.BaseModel):
     
 class JsonClasificacion(pydantic.BaseModel):
     id_caso: int = fastapi.Query(default=None, description="ID único interno del ticket de atención(enviado en la consulta)")
-    mercado: MercadoClass
+    mercado: typing.List[MercadoClass]
     
 class ReclamoRetroOut(pydantic.BaseModel):
     TransactionID: int = fastapi.Query(default=None, description="Código Único de la transacción")
