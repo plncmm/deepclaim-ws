@@ -185,7 +185,7 @@ async def classify_reclamo(
 
 @app.post("/reclamo_diario", response_model=deepclaim_ws.data.ReclamoDiarioOut, summary="Clasificar reclamos diarios.", description="Este servicio recibe los datos del reclamo ingresado por el ciudadano con los datos del día anterior con el fin de poder realizar cuadraturas al servicio.", dependencies=[fastapi.Depends(get_current_active_client)])
 async def classify_reclamo_diario(
-    datos_reclamo: deepclaim_ws.data.JsonReclamos
+    datos_diario: deepclaim_ws.data.JsonReclamos
     ):  
     response = deepclaim_ws.data.ReclamoDiarioOut(
         TransactionID=0,
