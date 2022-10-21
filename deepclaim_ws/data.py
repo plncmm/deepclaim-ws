@@ -11,6 +11,12 @@ class JsonReclamo(pydantic.BaseModel):
     clasificacion_ciudadano: str = fastapi.Query(default=None, description="Producto - clasificación inicial ingresada por el ciudadano")
     entidad_ciudadano: str = fastapi.Query(default=None, description="Solo para los casos bancarios ingresan el banco contra el cual está reclamando")
     cantidad_documentos: int = fastapi.Query(default=None, description="Se indicará la cantidad de documentos que se enviaran como adjuntos")
+    @pydantic.validator("fecha_ingreso", pre=True)
+    def parse_fecha_ingreso(cls, value):
+        return datetime.datetime.strptime(
+            value,
+            "%d/%m/%Y"
+        ).date()
 
 class StatusClass(pydantic.BaseModel):
     Code: int = fastapi.Query(default=None, description="Códigos de estado de Respuesta HTML (¿HTTP querían decir?)")
@@ -45,11 +51,23 @@ class DatosCasos(pydantic.BaseModel):
     entidad_ciudadano: str = fastapi.Query(default=None, description="Solo para los casos bancarios ingresan el banco contra el cual está reclamando")
     clasificado: str = fastapi.Query(default=None, description="Señala si el reclamo ya fue clasificado por el algoritmo o no. (S/N)")
     Documentos: typing.List[DocumentosClass]
+    @pydantic.validator("fecha_ingreso", pre=True)
+    def parse_fecha_ingreso(cls, value):
+        return datetime.datetime.strptime(
+            value,
+            "%d/%m/%Y"
+        ).date()
 
 class DataReclamo(pydantic.BaseModel):
     fecha_consulta: datetime.date = fastapi.Query(default=None, description="Fecha consulta")
     Datos_casos: typing.List[DatosCasos] = fastapi.Query(default=None, description="Array que contiene la información para iniciar el ticket")
-    
+    @pydantic.validator("fecha_consulta", pre=True)
+    def parse_fecha_consulta(cls, value):
+        return datetime.datetime.strptime(
+            value,
+            "%d/%m/%Y"
+        ).date()
+        
 class JsonReclamos(pydantic.BaseModel):
     Data: DataReclamo
 
@@ -66,7 +84,13 @@ class Json(pydantic.BaseModel):
     entidad_ciudadano: str = fastapi.Query(default=None, description="Solo para los casos bancarios ingresan el banco contra el cual está reclamando")
     cantidad_documentos: int = fastapi.Query(default=None, description="Se indicará la cantidad de documentos que se enviaran como adjuntos")
     descripcion_error: str = fastapi.Query(default=None, description="Se indicará la descripción del error, vacío en caso de tener error")
-    
+    @pydantic.validator("fecha_ingreso", pre=True)
+    def parse_fecha_ingreso(cls, value):
+        return datetime.datetime.strptime(
+            value,
+            "%d/%m/%Y"
+        ).date()
+        
 class JsonClasificacion(pydantic.BaseModel):
     id_caso: int = fastapi.Query(default=None, description="ID único interno del ticket de atención(enviado en la consulta)")
     mercado: typing.List[MercadoClass]
