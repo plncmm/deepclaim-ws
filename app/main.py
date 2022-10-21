@@ -2,7 +2,7 @@ import fastapi
 import pydantic
 
 import deepclaim_ws.data
-import deepclaim_ws.dummy_classifier
+from  deepclaim_ws.dummy_classifier import DummyClaimClassifier as ClaimClassifier
 import typing
 import passlib.context
 import datetime
@@ -159,11 +159,7 @@ async def classify_reclamo(
     archivo_1: typing.Optional[fastapi.UploadFile] = fastapi.File(None), 
     archivo_2: typing.Optional[fastapi.UploadFile] = fastapi.File(None)
     ):  
-    c_mercado = deepclaim_ws.dummy_classifier.DummyMercadoClassifier()
-    c_tipo_entidad = deepclaim_ws.dummy_classifier.DummyTipoEntidadClassifier()
-    c_tipo_materia = deepclaim_ws.dummy_classifier.DummyTipoMateriaClassifier()
-    c_tipo_producto = deepclaim_ws.dummy_classifier.DummyTipoProductoClassifier()
-    c_nombre_entidad = deepclaim_ws.dummy_classifier.DummyNombreEntidadClassifier()
+    c = ClaimClassifier()
     response = deepclaim_ws.data.ReclamoOut(
         TransactionID=0,
         Status = deepclaim_ws.data.StatusClass(
@@ -172,13 +168,7 @@ async def classify_reclamo(
         ),
         Data = deepclaim_ws.data.RespuestaClass(
             id_caso = datos_reclamo.id_caso,
-            mercado = deepclaim_ws.data.MercadoClass(
-                tipo_mercado = c_mercado.predict([datos_reclamo.descripcion_problema])[0],
-                tipo_entidad = c_tipo_entidad.predict([datos_reclamo.descripcion_problema])[0],
-                nombre_entidad = c_nombre_entidad.predict([datos_reclamo.descripcion_problema])[0],
-                tipo_producto = c_tipo_producto.predict([datos_reclamo.descripcion_problema])[:2],
-                tipo_materia = c_tipo_materia.predict([datos_reclamo.descripcion_problema])[:2]
-            )
+            mercado = c.predict([datos_reclamo.descripcion_problema])[0]
         )
     )
     return response
@@ -202,11 +192,7 @@ async def classify_reclamo_sinRespuesta(
     archivo_1: typing.Optional[fastapi.UploadFile] = fastapi.File(None), 
     archivo_2: typing.Optional[fastapi.UploadFile] = fastapi.File(None)
     ):  
-    c_mercado = deepclaim_ws.dummy_classifier.DummyMercadoClassifier()
-    c_tipo_entidad = deepclaim_ws.dummy_classifier.DummyTipoEntidadClassifier()
-    c_tipo_materia = deepclaim_ws.dummy_classifier.DummyTipoMateriaClassifier()
-    c_tipo_producto = deepclaim_ws.dummy_classifier.DummyTipoProductoClassifier()
-    c_nombre_entidad = deepclaim_ws.dummy_classifier.DummyNombreEntidadClassifier()
+    c = ClaimClassifier()
     response = deepclaim_ws.data.ReclamoOut(
         TransactionID=0,
         Status = deepclaim_ws.data.StatusClass(
@@ -215,13 +201,7 @@ async def classify_reclamo_sinRespuesta(
         ),
         Data = deepclaim_ws.data.RespuestaClass(
             id_caso = datos_reclamo.id_caso,
-            mercado = deepclaim_ws.data.MercadoClass(
-                tipo_mercado = c_mercado.predict([datos_reclamo.descripcion_problema])[0],
-                tipo_entidad = c_tipo_entidad.predict([datos_reclamo.descripcion_problema])[0],
-                nombre_entidad = c_nombre_entidad.predict([datos_reclamo.descripcion_problema])[0],
-                tipo_producto = c_tipo_producto.predict([datos_reclamo.descripcion_problema])[:2],
-                tipo_materia = c_tipo_materia.predict([datos_reclamo.descripcion_problema])[:2]
-            )
+            mercado = c.predict([datos_reclamo.descripcion_problema])[0]
         )
     )
     return response
