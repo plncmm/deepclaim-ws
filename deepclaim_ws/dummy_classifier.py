@@ -1,6 +1,6 @@
 import random
 import typing
-import data
+import deepclaim_ws.data
 
 
 class DummyClassifier:
@@ -46,10 +46,10 @@ class DummyClaimClassifier(DummyClassifier):
         self.c_tipo_producto = DummyTipoProductoClassifier()
         self.c_nombre_entidad = DummyNombreEntidadClassifier()
 
-    def predict(self, x: list) -> typing.List[data.MercadoClass]:
+    def predict(self, x: list) -> typing.List[deepclaim_ws.data.MercadoClass]:
         mercados = []
         for s in x:
-            mercado = data.MercadoClass(
+            mercado = deepclaim_ws.data.MercadoClass(
                 tipo_mercado=self.c_mercado.predict([s])[0],
                 tipo_entidad=self.c_tipo_entidad.predict([s])[0],
                 nombre_entidad=self.c_nombre_entidad.predict([s])[0],
