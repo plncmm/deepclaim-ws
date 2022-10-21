@@ -3,7 +3,7 @@ import pydantic
 import deepclaim_ws.data
 import os
 dummy = False if os.environ.get('DUMMY') in ["False","false"] else True
-if dummy:
+if False:
     from  deepclaim_ws.dummy_classifier import DummyClaimClassifier as ClaimClassifier
 else:
     from  deepclaim_ws.classifier import ClaimClassifier
@@ -14,6 +14,8 @@ import jose.jwt
 import jose
 import dotenv
 import json
+
+c = ClaimClassifier()
 
 env = dotenv.dotenv_values("secret.env")
 
@@ -163,7 +165,6 @@ async def classify_reclamo(
     archivo_1: typing.Optional[fastapi.UploadFile] = fastapi.File(None), 
     archivo_2: typing.Optional[fastapi.UploadFile] = fastapi.File(None)
     ):  
-    c = ClaimClassifier()
     response = deepclaim_ws.data.ReclamoOut(
         TransactionID=0,
         Status = deepclaim_ws.data.StatusClass(
@@ -196,7 +197,6 @@ async def classify_reclamo_sinRespuesta(
     archivo_1: typing.Optional[fastapi.UploadFile] = fastapi.File(None), 
     archivo_2: typing.Optional[fastapi.UploadFile] = fastapi.File(None)
     ):  
-    c = ClaimClassifier()
     response = deepclaim_ws.data.ReclamoOut(
         TransactionID=0,
         Status = deepclaim_ws.data.StatusClass(
