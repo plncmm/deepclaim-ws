@@ -5,10 +5,17 @@ import pandas as pd
 import re
 import csv
 import numpy as np
-from utils import load_model
+try:
+    from utils import load_model
+except ModuleNotFoundError:
+    from deepclaim_ws.utils import load_model
 from transformers import BertTokenizer, BertForSequenceClassification
 from torch.utils.data import random_split, TensorDataset, DataLoader, RandomSampler, SequentialSampler
 import time
+try:
+    import data
+except ModuleNotFoundError:
+    import deepclaim_ws.data as data
 
 tokenizer = BertTokenizer.from_pretrained(
     'dccuchile/bert-base-spanish-wwm-uncased', do_lower_case=True)
@@ -320,8 +327,16 @@ class ClaimClassifier:
 
                 labels['Tipo_Producto'] = seguros_valores_tipo_producto_opciones[int(
                     pred_seguros_valores_tipo_producto)]
-
-            predictions.append(labels)
+                
+                
+            mercado = data.MercadoClass(
+                tipo_mercado=labels['Tipo_Mercado'],
+                tipo_entidad=labels['Tipo_Entidad'],
+                nombre_entidad=labels['Nombre_Entidad'],
+                tipo_producto=[labels['Tipo_Producto']],
+                tipo_materia=[labels['Tipo_Materia']]
+            )
+            predictions.append(mercado)
             table.append(sentence_data)
 
         return predictions
