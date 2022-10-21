@@ -2,7 +2,11 @@ import fastapi
 import pydantic
 
 import deepclaim_ws.data
-from  deepclaim_ws.dummy_classifier import DummyClaimClassifier as ClaimClassifier
+if True:
+    from  deepclaim_ws.dummy_classifier import DummyClaimClassifier as ClaimClassifier
+else:
+    from  deepclaim_ws.classifier import ClaimClassifier
+    
 import typing
 import passlib.context
 import datetime
