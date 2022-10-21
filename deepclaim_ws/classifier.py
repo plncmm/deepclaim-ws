@@ -26,22 +26,24 @@ model = BertForSequenceClassification.from_pretrained(
     output_hidden_states=False,
 )
 
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
 class ClaimClassifier:
     def __init__(self) -> str:
 
         self.tipo_mercado = load_model(
-            model, tokenizer, 'models/mercado_ingreso_bancos_o_otros', 'cpu')
+            model, tokenizer, 'models/mercado_ingreso_bancos_o_otros', device)
         self.tipo_mercado_seguros_valores = load_model(
-            model, tokenizer, 'models/mercado_ingreso_seguros_o_valores', 'cpu')
+            model, tokenizer, 'models/mercado_ingreso_seguros_o_valores', device)
 
         self.bancos_tipo_entidad = load_model(
-            model, tokenizer, 'models/bancos_tipo_entidad', 'cpu')
+            model, tokenizer, 'models/bancos_tipo_entidad', device)
         self.bancos_tipo_producto = load_model(
-            model, tokenizer, 'models/bancos_tipo_producto', 'cpu')
+            model, tokenizer, 'models/bancos_tipo_producto', device)
         self.bancos_tipo_materia = load_model(
-            model, tokenizer, 'models/bancos_tipo_materia', 'cpu')
+            model, tokenizer, 'models/bancos_tipo_materia', device)
         self.bancos_nombre_entidad = load_model(
-            model, tokenizer, 'models/bancos_nombre_entidad', 'cpu')
+            model, tokenizer, 'models/bancos_nombre_entidad', device)
 
         self.tipo_mercado.eval()
         self.tipo_mercado_seguros_valores.eval()
@@ -51,13 +53,13 @@ class ClaimClassifier:
         self.bancos_nombre_entidad.eval()
 
         self.seguros_valores_tipo_entidad = load_model(
-            model, tokenizer, 'models/seguros_valores_tipo_entidad', 'cpu')
+            model, tokenizer, 'models/seguros_valores_tipo_entidad', device)
         self.seguros_valores_tipo_producto = load_model(
-            model, tokenizer, 'models/seguros_valores_tipo_producto', 'cpu')
+            model, tokenizer, 'models/seguros_valores_tipo_producto', device)
         self.seguros_valores_tipo_materia = load_model(
-            model, tokenizer, 'models/seguros_valores_tipo_materia', 'cpu')
+            model, tokenizer, 'models/seguros_valores_tipo_materia', device)
         self.seguros_valores_nombre_entidad = load_model(
-            model, tokenizer, 'models/seguros_valores_nombre_entidad', 'cpu')
+            model, tokenizer, 'models/seguros_valores_nombre_entidad', device)
 
         self.seguros_valores_tipo_entidad.eval()
         self.seguros_valores_tipo_producto.eval()
@@ -97,7 +99,7 @@ class ClaimClassifier:
         predictions, true_labels = [], []
         table = []
 
-        device = 'cpu'
+        device = device
 
         predictions = []
 
