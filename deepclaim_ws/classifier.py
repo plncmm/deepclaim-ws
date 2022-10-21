@@ -99,8 +99,6 @@ class ClaimClassifier:
         predictions, true_labels = [], []
         table = []
 
-        device = device
-
         predictions = []
 
         for i, batch in enumerate(prediction_dataloader):
