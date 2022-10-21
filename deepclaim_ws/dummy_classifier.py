@@ -1,6 +1,9 @@
 import random
 import typing
-from . import data
+try:
+    import data
+except ModuleNotFoundError:
+    import deepclaim_ws.data as data
 
 
 class DummyClassifier:
@@ -61,4 +64,4 @@ class DummyClaimClassifier(DummyClassifier):
 
 if __name__ == '__main__':
     c = DummyClaimClassifier()
-    c.predict(['reclamo por seguro de vida'])
+    print(c.predict(['reclamo por seguro de vida']))
